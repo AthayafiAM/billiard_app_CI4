@@ -80,4 +80,38 @@ class LoginController extends ResourceController
             ], 500);
         }
     }
+
+    public function resetPassword()
+{
+    $db = \Config\Database::connect();
+
+    $email = $this->request->getPost('email');
+    $newPassword = $this->request->getPost('new_password');
+
+    if (!$email || !$newPassword) {
+        return $this->respond([
+            "status" => "error",
+            "message" => "Missing data"
+        ], 400);
+    }
+
+    $user = $db->table('users')->where('email', $email)->get()->getRow();
+
+    if (!$user) {
+        return $this->respond([
+            "status" => "error",
+            "message" => "User tidak ditemukan"
+        ], 404);
+    }
+
+    $db->table('users')
+        ->where('email', $email)
+        ->update(['password' => $newPassword]);
+
+    return $this->respond([
+        "status" => "success",
+        "message" => "Password berhasil diubah"
+    ]);
+}
+    
 }

@@ -13,6 +13,7 @@ $routes->group('api', function($routes) {
     // LOGIN & REGISTER
     $routes->post('login', 'Api\LoginController::login');
     $routes->post('register', 'Api\RegisterController::create');
+    $routes->post('reset-password', 'Api\LoginController::resetPassword');
 
     // CLUBS
     $routes->get('clubs', 'Api\ClubController::index');
