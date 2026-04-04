@@ -69,7 +69,7 @@ class LoginController extends ResourceController
                 'user'    => [
                     'id'    => $user->id,
                     'email' => $user->email,
-                    'name'  => $user->name ?? 'User' // Tambahan jika ada kolom nama
+                    'name'  => $user->name
                 ]
             ], 200);
 

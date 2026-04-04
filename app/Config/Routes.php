@@ -31,4 +31,9 @@ $routes->group('api', function($routes) {
     $routes->post('bookings', 'Api\BookingController::create');
     $routes->delete('bookings/(:num)', 'Api\BookingController::delete/$1');
     $routes->get('bookings/times', 'Api\BookingController::getBlockedTimes');
+
+    // USERS
+    $routes->get('profile', 'Api\UpdateProfileController::getProfile');
+    $routes->post('update-profile', 'Api\UpdateProfileController::updateProfile');
+    $routes->options('update-profile', 'Api\UpdateProfileController::updateProfile');
 });

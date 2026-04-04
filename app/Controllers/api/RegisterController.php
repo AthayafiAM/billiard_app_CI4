@@ -23,7 +23,7 @@ class RegisterController extends ResourceController
         $password = $this->request->getVar('password');
 
         if (empty($nama) || empty($email) || empty($password)) {
-            return $this->respond(['status' => 'error', 'message' => 'Semua data harus diisi'], 400);
+            return $this->respond(['status' => 'error', 'message' => 'All fields are required'], 400);
         }
 
         $db = \Config\Database::connect();
@@ -31,7 +31,7 @@ class RegisterController extends ResourceController
         // Cek apakah email sudah terdaftar
         $cek = $db->table('users')->where('email', $email)->get()->getRow();
         if ($cek) {
-            return $this->respond(['status' => 'error', 'message' => 'Email sudah digunakan'], 400);
+            return $this->respond(['status' => 'error', 'message' => 'Email Already Used'], 400);
         }
 
         // Simpan ke database (Sesuai gambar database Abang: email, name, password)
@@ -42,9 +42,9 @@ class RegisterController extends ResourceController
         ];
 
         if ($db->table('users')->insert($data)) {
-            return $this->respond(['status' => 'success', 'message' => 'Akun berhasil dibuat'], 200);
+            return $this->respond(['status' => 'success', 'message' => 'Account Successfully Created'], 200);
         }
 
-        return $this->respond(['status' => 'error', 'message' => 'Gagal membuat akun'], 500);
+        return $this->respond(['status' => 'error', 'message' => 'Failed to create account'], 500);
     }
 }
