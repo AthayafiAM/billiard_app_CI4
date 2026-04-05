@@ -13,12 +13,10 @@ class BookingController extends ResourceController
     {
         $db = \Config\Database::connect();
 
-        // 🔥 AMBIL EMAIL DARI QUERY (?user_email=...)
         $user_email = $this->request->getGet('user_email');
 
         $builder = $db->table('bookings');
 
-        // 🔐 FILTER AGAR HANYA DATA USER INI
         if (!empty($user_email)) {
             $builder->where('user_email', $user_email);
         }
@@ -31,7 +29,7 @@ class BookingController extends ResourceController
         ]);
     }
 
-    // ➕ CREATE BOOKING (FIX BENTROK + USER)
+    // ➕ CREATE BOOKING (FIX + PAYMENT)
     public function create()
     {
         $db = \Config\Database::connect();
@@ -47,7 +45,9 @@ class BookingController extends ResourceController
         
         $username   = $this->request->getPost('user_name'); 
         $user_email = $this->request->getPost('user_email');
-        $user_image = $this->request->getPost('user_image');
+
+        // 🔥 TAMBAHAN PAYMENT
+        $payment    = $this->request->getPost('payment') ?? 'Cash';
 
         // 🔥 VALIDASI
         if (!$table_name || !$date || !$start_time || !$duration || !$club_id) {
@@ -57,7 +57,7 @@ class BookingController extends ResourceController
             ], 400);
         }
 
-        // 🔥 CEK BENTROK (FIX: TAMBAH CLUB_ID)
+        // 🔥 CEK BENTROK
         $existing = $db->table('bookings')
             ->where('table_name', $table_name)
             ->where('club_id', $club_id)
@@ -80,14 +80,14 @@ class BookingController extends ResourceController
             }
         }
 
-        // 🔥 INSERT
+        // 🔥 INSERT (DITAMBAH PAYMENT)
         $data = [
             'table_name' => $table_name,
             'club_id'    => $club_id,
             'club'       => $club_name,
             'user_name'  => $username,
             'user_email' => $user_email,
-            'user_image' => $user_image,
+            'payment'    => $payment, // ✅ BARU
             'date'       => $date,
             'start_time' => $start_time,
             'duration'   => $duration,
@@ -112,7 +112,7 @@ class BookingController extends ResourceController
         ]);
     }
 
-    // 🔥 GET BLOCKED TIMES (FIX CLUB_ID)
+    // 🔥 GET BLOCKED TIMES
     public function getBlockedTimes()
     {
         $table   = $this->request->getGet('table_name');

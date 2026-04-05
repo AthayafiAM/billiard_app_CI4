@@ -37,4 +37,8 @@ $routes->group('api', function($routes) {
     $routes->get('profile', 'Api\UpdateProfileController::getProfile');
     $routes->post('update-profile', 'Api\UpdateProfileController::updateProfile');
     $routes->options('update-profile', 'Api\UpdateProfileController::updateProfile');
+
+    // PAYMENTS
+    $routes->post('payment/save', 'Api\PaymentController::save');
+    $routes->get('payment', 'Api\PaymentController::get');
 });
